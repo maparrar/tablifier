@@ -649,7 +649,9 @@
      * @param {object} self 
      */
     function toExcel(tableElementId, self){
-        var tab_text="<table border='2px'>";
+        var topHtml = '<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"/></head><body>';
+        var botHtml = '</body></html>';
+        var tab_text=topHtml+"<table border='2px'>";
         var textRange; 
         var j=0;
         var htmlRow = '';
@@ -661,7 +663,7 @@
             //tab_text=tab_text+"</tr>";
         }
 
-        tab_text=tab_text+"</table>";
+        tab_text=tab_text+"</table>"+botHtml;
         tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
         tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
         tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // removes input params
