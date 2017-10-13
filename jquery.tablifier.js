@@ -106,6 +106,7 @@
      */
     function init(elem,userOptions,callback){
         var self={};
+        let date = new Date();
         //Defines the size of a set of objects
         Object.size = function(obj) {
             var size = 0, key;
@@ -117,6 +118,7 @@
         
         //Options default variables
         var def = {
+            fileName: `reporte_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}.xls`,
             decimals: 2,
             number_decimals: 0,
             double_decimals: 2,
@@ -137,6 +139,7 @@
         self.double_decimals=opts.double_decimals;
         self.buttons=opts.buttons;
         self.events=opts.events;
+        self.fileName=opts.fileName;
         
         prepareData(self);
         
@@ -212,7 +215,7 @@
      */
     function attachTableEvents(self){
         self.div.find('.export_to_excel').click(function(){
-            toExcel($(this).attr('data-table-export'));
+            toExcel($(this).attr('data-table-export'), self);
         });
         self.div.find('.tf_expand').click(function(){
             var expand=self.div.find('.tf_open');
@@ -643,15 +646,18 @@
     /**
      * Exports a table to Excel
      * @param {string} tableElementId Id of the element to export
+     * @param {object} self 
      */
-    function toExcel(tableElementId){
-        var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
+    function toExcel(tableElementId, self){
+        var tab_text="<table border='2px'>";
         var textRange; 
         var j=0;
+        var htmlRow = '';
         tab = document.getElementById(tableElementId); // id of table
 
-        for(j = 0 ; j < tab.rows.length ; j++){     
-            tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
+        for(j = 0 ; j < tab.rows.length ; j++){
+            htmlRow = (j == 0)?"<tr bgcolor='#87AFC6'>":"<tr>";
+            tab_text=tab_text+htmlRow+tab.rows[j].innerHTML+"</tr>";
             //tab_text=tab_text+"</tr>";
         }
 
@@ -669,6 +675,12 @@
             txtArea1.document.close();
             txtArea1.focus(); 
             sa=txtArea1.document.execCommand("GuardarComo",true,"reporte.xls");
+        }else if(navigator.userAgent.toLowerCase().indexOf('chrome') > -1){ // sí es Chrome
+            var downloadLink = document.createElement('a');
+            downloadLink.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tab_text);
+            downloadLink.download = self.fileName;
+            downloadLink.click();
+            sa = null;
         }else{                 //other browser not tested on IE 11
             sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
         }
