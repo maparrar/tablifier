@@ -551,14 +551,16 @@
             '<div class="btn-group" role="group" aria-label="Botones de reporte">'+
                 stringButtons+
             '</div>'+
-            '<table id="tf_table_'+self.div[0].id+'" class="tf_table '+styles.table+'">'+
-                '<thead class="tf_head '+styles.head+'">'+
-                    '<tr class="tf_categories"></tr>'+
-                    '<tr class="tf_subcategories"></tr>'+
-                    '<tr class="tf_fields"></tr>'+
-                '</thead>'+
-                '<tbody class="tf_body '+styles.body+'"></tbody>'+
-            '</table>';
+            '<div class="tf_div_table">'+
+                '<table id="tf_table_'+self.div[0].id+'" class="tf_table '+styles.table+'">'+
+                    '<thead class="tf_head '+styles.head+'">'+
+                        '<tr class="tf_categories"></tr>'+
+                        '<tr class="tf_subcategories"></tr>'+
+                        '<tr class="tf_fields"></tr>'+
+                    '</thead>'+
+                    '<tbody class="tf_body '+styles.body+'"></tbody>'+
+                '</table>'+
+            '</div>';
         self.div.append(html);
     };
     
