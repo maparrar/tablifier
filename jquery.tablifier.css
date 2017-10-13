@@ -1,0 +1,15 @@
+.tf_table{
+    overflow-x: auto;
+}
+.tf_table th{
+    background: #337ab7;
+    color: #FFFFFF;
+}
+.tf_table .tf_change{
+    height: 13px;
+    line-height: 13px;
+    margin-right: 5px;
+}
+.tf_table .tf_change span{
+    font-size: 0.7em;
+}
