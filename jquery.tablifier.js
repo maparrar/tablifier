@@ -151,6 +151,10 @@
         
         //Attach table events
         attachTableEvents(self);
+
+        startFilter(self.div[0].id);
+        
+
     };
     
     /**************************************************************************/
@@ -551,6 +555,13 @@
                 '<button class="btn btn-default tf_expand">Expandir</button>'+
                 '<button class="btn btn-default tf_collapse">Contraer</button>'+
             '</div>'+
+
+            '<div class="row pull-left">'+
+                '<div class="col-md-12">'+
+                    '<input id="tf_search_'+self.div[0].id+'" type="text" class="form-control" placeholder="Buscar"/>'+
+                '</div>'+
+            '</div>'+
+
             '<div class="btn-group" role="group" aria-label="Botones de reporte">'+
                 stringButtons+
             '</div>'+
@@ -631,13 +642,13 @@
                 numberClass='negative';
             }
             if(row[i].type==="numeric"){
-                html+='<td class="text-right '+numberClass+'">'+row[i].value.toLocaleString('es-CO',{maximumFractionDigits:self.number_decimals})+'</td>';
+                html+='<td data-value="'+row[i].data+'" class="text-right '+numberClass+'">'+row[i].value.toLocaleString('es-CO',{maximumFractionDigits:self.number_decimals})+'</td>';
             }else if(row[i].type==="double"){
-                html+='<td class="text-right">'+row[i].value.toLocaleString('es-CO',{maximumFractionDigits:self.double_decimals})+'</td>';
+                html+='<td data-value="'+row[i].data+'" class="text-right">'+row[i].value.toLocaleString('es-CO',{maximumFractionDigits:self.double_decimals})+'</td>';
             }else if(row[i].type==="double long"){
-                html+='<td class="text-right">'+row[i].value.toLocaleString('es-CO',{maximumFractionDigits: 3})+'</td>';
+                html+='<td data-value="'+row[i].data+'" class="text-right">'+row[i].value.toLocaleString('es-CO',{maximumFractionDigits: 3})+'</td>';
             }else{
-                html+='<td >'+row[i].value+'</td>';
+                html+='<td data-value="'+row[i].data+'">'+row[i].value+'</td>';
             }
         }
         return html;
@@ -688,5 +699,47 @@
         }
         return (sa);
     };
+   /**
+     * Start Filter from table
+     */
+    function startFilter(idTable){
+        // Detectamos cada Tecla
+        $('#tf_search_'+idTable).on('keyup', function(){
+            // valor a buscar
+            var query = $(this).val();
+            // Empezamos a recorrer la tabla
+            $('#tf_table_'+idTable).map(function(tableIndex){
+                // Etiqueta Table
+                var table = $(this)[tableIndex];
+                // Etiqueta tbody
+                var tbody = $(table).find('tbody');
+                // Recorremos el cuerpo de la tabla
+                tbody.map(function(tbodyIndex){
+                    // Capturamos las filas 
+                    var tr = $($(this)[tbodyIndex]).find('tr');
+                    // Recorremos las filas
+                    tr.map(function(){
+                        // Capturamos la fila actual
+                        var row = $(this)[0];
+                        // Validamos que exista un valor a buscar en el campo search
+                        // Si no existe un valor a buscar, muestra todas las filas
+                        if(query.length > 0){
+                            var findQuery = $(row).find('td').map(function(){
+                                // return ($($(this)[0]).attr('data-value').toLowerCase().startsWith(query.toLowerCase())) 
+                                return ($($(this)[0]).html().toLowerCase().startsWith(query.toLowerCase())) 
+                            });
+                            if(findQuery.filter(function(){ return this == true})[0]){
+                                $(row).removeClass('hidden');
+                            } else {
+                                $(row).addClass('hidden');
+                            }
+                        } else {
+                            $(row).removeClass('hidden');
+                        }
+                    })
+                });
+            })
+        })
+    }
 })(jQuery);
 
