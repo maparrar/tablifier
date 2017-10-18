@@ -118,7 +118,7 @@
         
         //Options default variables
         var def = {
-            fileName: `reporte_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}.xls`,
+            fileName: `reporte_${date.getFullYear()}_${date.getMonth()}_${date.getDate()}.xls`,
             decimals: 2,
             number_decimals: 0,
             double_decimals: 2,
