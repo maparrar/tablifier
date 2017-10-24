@@ -424,7 +424,8 @@
                 if(category.state==='closed'||Object.size(category.subcategories)===0){
                     row.push({
                         type:category.type,
-                        value:objCategory.value
+                        value:objCategory.value,
+                        data:objCategory.data
                     });
                 }else{
                     for(var k in category.subcategories){
@@ -471,7 +472,8 @@
                 if(subcategory.state==='closed'||Object.size(subcategory.fields)===0){
                     row.push({
                         type:subcategory.type,
-                        value:objSubcategory.value
+                        value:objSubcategory.value,
+                        data:objSubcategory.data
                     });
                 }else{
                     for(var j in subcategory.fields){
@@ -511,16 +513,19 @@
             if(field.id===objField.id){
                 row.push({
                     type:field.type,
-                    value:objField.value
+                    value:objField.value,
+                    data: objField.data
                 });
             }
         }
         if(row.length===0){
             var value=0;
+            var data=0;
             if(field.type!=='numeric'){
                 value="-";
+                data=null;
             }
-            row.push({type:field.type,value:value});
+            row.push({type:field.type,value:value, data:data});
         }
         return row;
     };
@@ -725,8 +730,8 @@
                         // Si no existe un valor a buscar, muestra todas las filas
                         if(query.length > 0){
                             var findQuery = $(row).find('td').map(function(){
-                                // return ($($(this)[0]).attr('data-value').toLowerCase().startsWith(query.toLowerCase())) 
-                                return ($($(this)[0]).html().toLowerCase().startsWith(query.toLowerCase())) 
+                                return ($($(this)[0]).attr('data-value').toLowerCase().startsWith(query.toLowerCase())) 
+                                // return ($($(this)[0]).html().toLowerCase().startsWith(query.toLowerCase())) 
                             });
                             if(findQuery.filter(function(){ return this == true})[0]){
                                 $(row).removeClass('hidden');
